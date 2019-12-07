@@ -176,10 +176,7 @@ class RangeAnnotation<D> implements ChartBehavior<D> {
             break;
         }
 
-        if (annotation is RangeAnnotationSegment) {
-          axis.addDomainValue(annotation.startValue);
-          axis.addDomainValue(annotation.endValue);
-        } else if (annotation is LineAnnotationSegment) {
+        if (annotation is LineAnnotationSegment) {
           axis.addDomainValue(annotation.value);
         }
       });
@@ -235,17 +232,13 @@ class RangeAnnotation<D> implements ChartBehavior<D> {
           ? annotation.strokeWidthPx ?? defaultLabelStyleSpec
           : 0.0;
 
-      final isRange = annotation is RangeAnnotationSegment;
 
       // The values can match the data type of the domain (D) or measure axis
       // (num).
       dynamic startValue;
       dynamic endValue;
 
-      if (annotation is RangeAnnotationSegment) {
-        startValue = annotation.startValue;
-        endValue = annotation.endValue;
-      } else if (annotation is LineAnnotationSegment) {
+      if (annotation is LineAnnotationSegment) {
         startValue = annotation.value;
         endValue = annotation.value;
       }
@@ -268,7 +261,6 @@ class RangeAnnotation<D> implements ChartBehavior<D> {
             ..startLabel = startLabel
             ..endLabel = endLabel
             ..middleLabel = middleLabel
-            ..isRange = isRange
             ..labelAnchor = labelAnchor
             ..labelDirection = labelDirection
             ..labelPosition = labelPosition
@@ -290,7 +282,6 @@ class RangeAnnotation<D> implements ChartBehavior<D> {
         ..startLabel = startLabel
         ..endLabel = endLabel
         ..middleLabel = middleLabel
-        ..isRange = isRange
         ..labelAnchor = labelAnchor
         ..labelDirection = labelDirection
         ..labelPosition = labelPosition
@@ -419,10 +410,6 @@ class _RangeAnnotationLayoutView<D> extends LayoutView {
       // have zero width or  height.
       final bounds = _getAnnotationBounds(annotationElement);
 
-      if (annotationElement.isRange) {
-        // Draw the annotation.
-        canvas.drawRect(bounds, fill: annotationElement.color);
-      } else {
         // Calculate the points for a line annotation.
         final points = _getLineAnnotationPoints(annotationElement);
 
@@ -432,7 +419,6 @@ class _RangeAnnotationLayoutView<D> extends LayoutView {
             points: points,
             stroke: annotationElement.color,
             strokeWidthPx: annotationElement.strokeWidthPx);
-      }
 
       // Create [TextStyle] from [TextStyleSpec] to be used by all the elements.
       // The [GraphicsFactory] is needed so it can't be created earlier.
@@ -1098,7 +1084,6 @@ class _AnnotationElement<D> {
   String startLabel;
   String endLabel;
   String middleLabel;
-  bool isRange;
   AnnotationLabelAnchor labelAnchor;
   AnnotationLabelDirection labelDirection;
   AnnotationLabelPosition labelPosition;
@@ -1114,7 +1099,6 @@ class _AnnotationElement<D> {
       ..startLabel = this.startLabel
       ..endLabel = this.endLabel
       ..middleLabel = this.middleLabel
-      ..isRange = this.isRange
       ..labelAnchor = this.labelAnchor
       ..labelDirection = this.labelDirection
       ..labelPosition = this.labelPosition
@@ -1280,36 +1264,6 @@ abstract class AnnotationSegment<D> {
       this.labelStyleSpec});
 }
 
-/// Data for a chart range annotation.
-class RangeAnnotationSegment<D> extends AnnotationSegment<D> {
-  final D startValue;
-  final D endValue;
-
-  RangeAnnotationSegment(
-      this.startValue, this.endValue, RangeAnnotationAxisType axisType,
-      {String axisId,
-      Color color,
-      String startLabel,
-      String endLabel,
-      String middleLabel,
-      AnnotationLabelAnchor labelAnchor,
-      AnnotationLabelDirection labelDirection,
-      AnnotationLabelPosition labelPosition,
-      TextStyleSpec labelStyleSpec})
-      : super(axisType,
-            axisId: axisId,
-            color: color,
-            startLabel: startLabel,
-            endLabel: endLabel,
-            middleLabel: middleLabel,
-            labelAnchor: labelAnchor,
-            labelDirection: labelDirection,
-            labelPosition: labelPosition,
-            labelStyleSpec: labelStyleSpec);
-
-  @override
-  String get key => 'r::${axisType}::${axisId}::${startValue}::${endValue}';
-}
 
 /// Data for a chart line annotation.
 class LineAnnotationSegment<D> extends AnnotationSegment<D> {

@@ -16,13 +16,12 @@
 import 'dart:collection' show LinkedHashMap;
 import 'dart:math' show Rectangle, Point;
 
-import 'package:charts_common/src/chart/scatter_plot/custom_point_renderer.dart';
-import 'package:charts_common/src/common/symbol_renderer.dart';
 import 'package:meta/meta.dart' show required, visibleForTesting;
 
 import '../../../common.dart';
 import '../../common/color.dart' show Color;
 import '../../common/math.dart' show clamp;
+import '../../common/symbol_renderer.dart';
 import '../../data/series.dart' show AttributeKey;
 import '../cartesian/axis/axis.dart'
     show ImmutableAxis, OrdinalAxis, domainAxisKey, measureAxisKey;
@@ -32,6 +31,7 @@ import '../common/chart_canvas.dart' show ChartCanvas, getAnimatedColor;
 import '../common/datum_details.dart' show DatumDetails;
 import '../common/processed_series.dart' show ImmutableSeries, MutableSeries;
 import '../common/series_datum.dart' show SeriesDatum;
+import '../scatter_plot/custom_point_renderer.dart';
 import '../scatter_plot/point_renderer_config.dart' show PointRendererConfig;
 import 'custom_line_renderer_config.dart';
 

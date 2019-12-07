@@ -186,6 +186,17 @@ int i = 0;
 
         LinePointHighlighter(
             symbolRenderer: CustomCircleSymbolRenderer(text: textSelected)
+        ),
+
+        charts.RangeAnnotation(
+          [
+            charts.LineAnnotationSegment(
+              dataXY.last.sales, charts.RangeAnnotationAxisType.measure,
+              startLabel: '${dataXY.last.sales}',
+              endLabel: '',
+              labelAnchor: charts.AnnotationLabelAnchor.end
+            )
+          ]
         )
       ],
       selectionModels: [
